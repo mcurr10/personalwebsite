@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>MTNDAO 2024</title>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Import the webpage's stylesheet -->
+  <link rel="stylesheet" href="/style.css" />
+
+  <!-- Import the latest version of Hydra Synth -->
+  <script src="https://unpkg.com/hydra-synth"></script>
+</head>
+<body>
+  <h1>MTNMNDAO 2024</h1>
+  <button onclick="playOscillator()">Oscillator</button>
+  <button onclick="useCamera()">Camera</button>
+  <button onclick="feedback()">Feedback</button>
+  <button onclick="playSound()">Play Sound</button>
+  <canvas id="myCanvas" width="400" height="400"></canvas>
+  <p>Example of using <a href="https://hydra-editor.glitch.me">Hydra</a> inside of an HTML site</p>
+  <p>For more info, see: <a href="https://github.com/ojack/hydra-synth">Hydra Synth GitHub</a>
+     or edit the <a href="https://glitch.com/edit/#!/hydra-webpage">source of this page</a></p>
+  <p>by <a href="https://mcurr10.github.io">Mari Summers</a></p>
+  <audio id="grimes-genesis" src="grimes-genesis.mp3" preload="auto"></audio> 
+  <script>
+    // Create a new Hydra Synth instance
+    var hydra = new Hydra({
+      canvas: document.getElementById("myCanvas"),
+      detectAudio: false
+    });
+
+    // Initial Hydra animation
+    osc(10, 0.1, 0.8).rotate(0, 0.1).kaleid().color(-1, 1).scale(2).out()
+
+    // Function to play oscillator animation
+    function playOscillator() {
+      osc(20).rotate(0, 0.1).modulate(osc()).out();
+    }
+
+    // Function to use camera
+    async function useCamera() {
+      try {
+        // Request camera access
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        // Initialize Hydra with the camera stream
+        s0.initCam(stream);
+        src(s0).color(-1, Math.random() * 2, 1).colorama().out();
+      } catch (err) {
+        console.error("Error accessing the camera: ", err);
+        alert("Failed to access the camera. Please ensure you have granted permission.");
+      }
+    }
+
+
+    // Function to create feedback effect
+    function feedback() {
+      src(o1)
+        .layer(src(o0).mask(shape(4, 0.4, 0)))
+        .scrollX([0.005, -0.005])
+        .scrollY(0.005)
+        .out(o1);
+      render(o1);
+    }
+
+    // Function to play sound
+    function playSound() {
+      var audio = document.getElementById("grimes-genesis");
+      audio.play();
+    }
+  </script>
+</body>
+</html>
